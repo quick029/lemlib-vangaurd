@@ -23,11 +23,11 @@
 #include <cerrno>
 #include <cmath>
 #include <cstdbool>
-#include <cstddef>
-#include <cstdint>
+#include <cstddef> // IWYU pragma: keep
+#include <cstdint> // IWYU pragma: keep
 #include <cstdio>
 #include <cstdlib>
-#include <iostream>
+#include <iostream> // IWYU pragma: keep
 #else /* (not) __cplusplus */
 #include <errno.h>
 #include <math.h>
@@ -45,41 +45,42 @@
 #define PROS_VERSION_STRING "4.1.1"
 
 
-#include "pros/adi.h"
-#include "pros/colors.h"
-#include "pros/device.h"
-#include "pros/distance.h"
-#include "pros/error.h"
-#include "pros/ext_adi.h"
-#include "pros/gps.h"
-#include "pros/imu.h"
-#include "pros/link.h"
-#include "pros/llemu.h"
-#include "pros/misc.h"
-#include "pros/motors.h"
-#include "pros/optical.h"
-#include "pros/rotation.h"
-#include "pros/rtos.h"
-#include "pros/screen.h"
-#include "pros/vision.h"
+#include "pros/adi.h" // IWYU pragma: keep
+#include "pros/colors.h" // IWYU pragma: keep
+#include "pros/device.h" // IWYU pragma: keep
+#include "pros/distance.h" // IWYU pragma: keep
+#include "pros/error.h" // IWYU pragma: keep
+#include "pros/ext_adi.h" // IWYU pragma: keep
+#include "pros/gps.h" // IWYU pragma: keep
+#include "pros/imu.h" // IWYU pragma: keep
+#include "pros/link.h" // IWYU pragma: keep
+#include "pros/llemu.h" // IWYU pragma: keep
+#include "pros/misc.h" // IWYU pragma: keep
+#include "pros/motors.h" // IWYU pragma: keep
+#include "pros/optical.h" // IWYU pragma: keep
+#include "pros/rotation.h" // IWYU pragma: keep
+#include "pros/rtos.h" // IWYU pragma: keep
+#include "pros/screen.h" // IWYU pragma: keep
+#include "pros/vision.h" // IWYU pragma: keep
 
 #ifdef __cplusplus
-#include "pros/adi.hpp"
-#include "pros/colors.hpp"
-#include "pros/device.hpp"
-#include "pros/distance.hpp"
-#include "pros/gps.hpp"
-#include "pros/imu.hpp"
-#include "pros/link.hpp"
-#include "pros/llemu.hpp"
-#include "pros/misc.hpp"
-#include "pros/motor_group.hpp"
-#include "pros/motors.hpp"
-#include "pros/optical.hpp"
-#include "pros/rotation.hpp"
-#include "pros/rtos.hpp"
-#include "pros/screen.hpp"
-#include "pros/vision.hpp"
+#include "pros/adi.hpp" // IWYU pragma: keep
+#include "pros/colors.hpp" // IWYU pragma: keep
+#include "pros/device.hpp" // IWYU pragma: keep
+#include "pros/distance.hpp" // IWYU pragma: keep
+#include "pros/gps.hpp" // IWYU pragma: keep
+#include "pros/imu.hpp" // IWYU pragma: keep
+#include "pros/link.hpp" // IWYU pragma: keep
+#include "pros/llemu.hpp" // IWYU pragma: keep
+#include "pros/misc.hpp" // IWYU pragma: keep
+#include "pros/motor_group.hpp" // IWYU pragma: keep
+#include "pros/motors.hpp" // IWYU pragma: keep
+#include "pros/optical.hpp" // IWYU pragma: keep
+#include "pros/rotation.hpp" // IWYU pragma: keep
+#include "pros/rtos.hpp" // IWYU pragma: keep
+#include "pros/screen.hpp" // IWYU pragma: keep
+#include "pros/vision.hpp" // IWYU pragma: keep
+#include "liblvgl/llemu.hpp" // IWYU pragma: keep
 #endif
 
 #endif  // _PROS_API_H_
