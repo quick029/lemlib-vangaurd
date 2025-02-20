@@ -35,12 +35,15 @@
 #define PROS_USE_LITERALS
 
 #include "api.h" // IWYU pragma: keep
+#include "lemlib/api.hpp" // IWYU pragma: keep
+
 
 /**
  * You should add more #includes here
  */
 //#include "okapi/api.hpp"
 
+extern lemlib::Chassis chassis;
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
  * Motor, you can use the namespace with the following commented out line.

@@ -49,9 +49,9 @@ lemlib::ControllerSettings linearController(10, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(8, // proportional gain (kP)
-                                             0.2, // integral gain (kI)
-                                             57, // derivative gain (kD)
+lemlib::ControllerSettings angularController(5, // proportional gain (kP)
+                                             0, // integral gain (kI)
+                                             25, // derivative gain (kD)
                                              1, // anti windup
                                              0, // small error range, in degrees
                                              0, // small error range timeout, in milliseconds
@@ -90,8 +90,8 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    //mainScreen();
-    pros::lcd::initialize(); // initialize brain screen
+    lv_example_chart_5();
+    // pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -106,10 +106,10 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Heading: %f", imu.get_heading()); // heading
+            // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            // pros::lcd::print(3, "Heading: %f", imu.get_heading()); // heading
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
@@ -146,7 +146,7 @@ ASSET(example_txt); // '.' replaced with "_" to make c++ happy
  */
 void autonomous() {
     chassis.setPose(0, 0, 0);
-    chassis.turnToHeading(90, 100000);
+    //chassis.turnToHeading(90, 100000);
     // Move to x: 20 and y: 15, and face heading 90. Timeout set to 4000 ms
     // chassis.moveToPose(20, 15, 90, 4000);
     // // Move to x: 0 and y: 0 and face heading 270, going backwards. Timeout set to 4000ms
