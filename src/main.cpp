@@ -1,7 +1,7 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/trackingWheel.hpp"
-#include "graphics.h"
+#include "graphics.h" // IWYU pragma: keep
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -49,9 +49,9 @@ lemlib::ControllerSettings linearController(10, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(8.1, // proportional gain (kP)
-                                             0, // integral gain (kI)
-                                             57.5, // derivative gain (kD)
+lemlib::ControllerSettings angularController(8, // proportional gain (kP)
+                                             0.2, // integral gain (kI)
+                                             57, // derivative gain (kD)
                                              1, // anti windup
                                              0, // small error range, in degrees
                                              0, // small error range timeout, in milliseconds
@@ -90,8 +90,8 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    mainScreen();
-    // pros::lcd::initialize(); // initialize brain screen
+    //mainScreen();
+    pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -106,10 +106,10 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            // pros::lcd::print(3, "Heading: %f", imu.get_heading()); // heading
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(3, "Heading: %f", imu.get_heading()); // heading
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
