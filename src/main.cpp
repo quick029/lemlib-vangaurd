@@ -2,6 +2,8 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "graphics.h" // IWYU pragma: keep
+#include "pros/device.hpp" // IWYU pragma: keep
+#include "pros/rtos.hpp"
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -21,10 +23,11 @@ pros::Rotation horizontalEnc(16);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation leftVerticalEnc(20);
 pros::Rotation rightVerticalEnc(-15);
-// horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -3.25);
-// vertical tracking wheel. 2.75" diameter, 2.5" offset, left of the robot (negative)
+// horizontal tracking wheel. 2" diameter, 3.25" offset, back of the robot (negative)
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -3.25);
+// vertical tracking wheel. 2" diameter, 1.75" offset, left of the robot (negative)
 lemlib::TrackingWheel leftVertical(&leftVerticalEnc, lemlib::Omniwheel::NEW_2, -1.75);
+// vertical tracking wheel. 2" diameter, 1.75" offset, right of the robot (positive)
 lemlib::TrackingWheel rightVertical(&rightVerticalEnc, lemlib::Omniwheel::NEW_2, 1.75);
 
 // drivetrain settings
@@ -40,20 +43,20 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 lemlib::ControllerSettings linearController(10, // proportional gain (kP)
                                             0, // integral gain (kI)
                                             3, // derivative gain (kD)
-                                            3, // anti windup
-                                            1, // small error range, in inches
-                                            100, // small error range timeout, in milliseconds
-                                            3, // large error range, in inches
-                                            500, // large error range timeout, in milliseconds
-                                            20 // maximum acceleration (slew)
+                                            0, // anti windup
+                                            0.1, // small error range, in inches
+                                            0, // small error range timeout, in milliseconds
+                                            0, // large error range, in inches
+                                            0, // large error range timeout, in milliseconds
+                                            0 // maximum acceleration (slew)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(5, // proportional gain (kP)
+lemlib::ControllerSettings angularController(9, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             25, // derivative gain (kD)
-                                             1, // anti windup
-                                             0, // small error range, in degrees
+                                             78.5, // derivative gain (kD)
+                                             0, // anti windup
+                                             0.1, // small error range, in degrees
                                              0, // small error range timeout, in milliseconds
                                              0, // large error range, in degrees
                                              0, // large error range timeout, in milliseconds
@@ -61,8 +64,8 @@ lemlib::ControllerSettings angularController(5, // proportional gain (kP)
 );
 
 // sensors for odometry
-lemlib::OdomSensors sensors(&leftVertical, // vertical tracking wheel
-                            &rightVertical, // vertical tracking wheel 2, set to nullptr as we don't have a second one
+lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel
+                            nullptr, // vertical tracking wheel 2, set to nullptr as we don't have a second one
                             &horizontal, // horizontal tracking wheel
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
                             &imu // inertial sensor
@@ -90,8 +93,7 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    lv_example_chart_5();
-    // pros::lcd::initialize(); // initialize brain screen
+    pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -106,10 +108,10 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            // pros::lcd::print(3, "Heading: %f", imu.get_heading()); // heading
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(3, "Heading: %f", imu.get_heading()); // heading
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
@@ -137,7 +139,7 @@ void competition_initialize() {}
 
 // get a path used for pure pursuit
 // this needs to be put outside a function
-ASSET(example_txt); // '.' replaced with "_" to make c++ happy
+ASSET(mypath_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -146,32 +148,16 @@ ASSET(example_txt); // '.' replaced with "_" to make c++ happy
  */
 void autonomous() {
     chassis.setPose(0, 0, 0);
-    //chassis.turnToHeading(90, 100000);
-    // Move to x: 20 and y: 15, and face heading 90. Timeout set to 4000 ms
-    // chassis.moveToPose(20, 15, 90, 4000);
-    // // Move to x: 0 and y: 0 and face heading 270, going backwards. Timeout set to 4000ms
-    // chassis.moveToPose(0, 0, 270, 4000, {.forwards = false});
-    // // cancel the movement after it has traveled 10 inches
-    // chassis.waitUntil(10);
-    // chassis.cancelMotion();
-    // // Turn to face the point x:45, y:-45. Timeout set to 1000
-    // // dont turn faster than 60 (out of a maximum of 127)
-    // chassis.turnToPoint(45, -45, 1000, {.maxSpeed = 60});
-    // // Turn to face a direction of 90º. Timeout set to 1000
-    // // will always be faster than 100 (out of a maximum of 127)
-    // // also force it to turn clockwise, the long way around
-    // chassis.turnToHeading(90, 1000, {.direction = AngularDirection::CW_CLOCKWISE, .minSpeed = 100});
-    // // Follow the path in path.txt. Lookahead at 15, Timeout set to 4000
-    // // following the path with the back of the robot (forwards = false)
-    // // see line 116 to see how to define a path
-    // chassis.follow(example_txt, 15, 4000, false);
-    // // wait until the chassis has traveled 10 inches. Otherwise the code directly after
-    // // the movement will run immediately
-    // // Unless its another movement, in which case it will wait
-    // chassis.waitUntil(10);
+    // recordPID();
+
+    chassis.follow(mypath_txt, 5, 4000);
+
+    chassis.waitUntil(10);
     pros::lcd::print(4, "Traveled 10 inches during pure pursuit!");
     // wait until the movement is done
     chassis.waitUntilDone();
+    // stopRecordingPID();
+    //lv_example_chart_5();
     pros::lcd::print(4, "pure pursuit finished!");
 }
 
