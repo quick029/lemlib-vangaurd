@@ -1,4 +1,6 @@
 #include "graphics.h" // IWYU pragma: keep
+#include "auton.h"
+#include "liblvgl/core/lv_disp.h"
 #include "liblvgl/core/lv_obj.h"
 #include "liblvgl/core/lv_obj_style.h"
 #include "liblvgl/misc/lv_color.h"
@@ -102,6 +104,7 @@ void lv_example_btn_1(void) {
         lv_obj_clear_state(buttonBluePos, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonBlueNeg, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonSkills, LV_STATE_DISABLED);
+        autonType = RED_POSITIVE;
       },
       LV_EVENT_PRESSED, NULL);
   lv_obj_align(buttonRedPos, LV_ALIGN_CENTER, xPos, yPos);
@@ -128,6 +131,7 @@ void lv_example_btn_1(void) {
         lv_obj_clear_state(buttonBluePos, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonBlueNeg, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonSkills, LV_STATE_DISABLED);
+        autonType = RED_NEGATIVE;
       },
       LV_EVENT_PRESSED, NULL);
   lv_obj_align(buttonRedNeg, LV_ALIGN_CENTER, xPos + 130, yPos);
@@ -154,6 +158,7 @@ void lv_example_btn_1(void) {
         lv_obj_clear_state(buttonRedPos, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonRedNeg, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonSkills, LV_STATE_DISABLED);
+        autonType = BLUE_POSITIVE;
       },
       LV_EVENT_PRESSED, NULL);
   lv_obj_align(buttonBluePos, LV_ALIGN_CENTER, xPos, yPos + 80);
@@ -176,6 +181,7 @@ void lv_example_btn_1(void) {
         lv_obj_clear_state(buttonRedPos, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonRedNeg, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonSkills, LV_STATE_DISABLED);
+        autonType = BLUE_NEGATIVE;
       },
       LV_EVENT_PRESSED, NULL);
   lv_obj_align(buttonBlueNeg, LV_ALIGN_CENTER, xPos + 130, yPos + 80);
@@ -190,11 +196,7 @@ void lv_example_btn_1(void) {
   lv_obj_add_event_cb(
       buttonScoreAlliance,
       [](lv_event_t *e) {
-        //   lv_obj_add_state(buttonBlueNeg, LV_STATE_DISABLED);
-        //   lv_obj_clear_state(buttonBluePos, LV_STATE_DISABLED);
-        // lv_obj_clear_state(buttonRedPos, LV_STATE_DISABLED);
-        // lv_obj_clear_state(buttonRedNeg, LV_STATE_DISABLED);
-        // lv_obj_clear_state(buttonSkills, LV_STATE_DISABLED);
+        scoreAllianceStake = !scoreAllianceStake;
       },
       LV_EVENT_ALL, NULL);
   lv_obj_align(buttonScoreAlliance, LV_ALIGN_CENTER, xPos + 290, yPos + 40);
@@ -222,6 +224,7 @@ void lv_example_btn_1(void) {
         lv_obj_clear_state(buttonRedNeg, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonBluePos, LV_STATE_DISABLED);
         lv_obj_clear_state(buttonBlueNeg, LV_STATE_DISABLED);
+        autonType = SKILLS;
       },
       LV_EVENT_PRESSED, NULL);
   lv_obj_align(buttonSkills, LV_ALIGN_CENTER, xPos + 65, yPos + 155);
@@ -241,7 +244,8 @@ void lv_example_btn_1(void) {
   lv_obj_add_event_cb(
     buttonConfirm,
     [](lv_event_t *e) {
-      // startAuton();
+      autonConfirmed = true;
+      // lv_scr_load(lv_obj_t *scr);
     },
     LV_EVENT_PRESSED, NULL);
 lv_obj_align(buttonConfirm, LV_ALIGN_CENTER, xPos + 290, yPos + 155);

@@ -1,10 +1,24 @@
 #include "auton.h"
 #include "main.h"
+#include "pros/rtos.hpp"
 
 auton_type autonType = RED_NEGATIVE;
+bool scoreAllianceStake = true;
+bool autonConfirmed = false;
 
 void runAuton() {
-  if (autonType == RED_NEGATIVE) {
+  while (!autonConfirmed) {
+    pros::delay(50);
+  }
+  if (autonType == RED_POSITIVE && scoreAllianceStake) {
+    // code
+  }
+  
+  else if (autonType == RED_POSITIVE && !scoreAllianceStake) {
+    // code
+  }
+  
+  else if (autonType == RED_NEGATIVE && scoreAllianceStake) {
     chassis.setPose(60, -17, 180);
     // recordPID();
     // pros::delay(5000);
@@ -40,5 +54,21 @@ void runAuton() {
     // stopRecordingPID();
     // lv_example_chart_5();
     // pros::lcd::print(4, "pure pursuit finished!");
+  }
+
+  else if(autonType == BLUE_POSITIVE && scoreAllianceStake) {
+    // code
+  }
+
+  else if(autonType == BLUE_POSITIVE && !scoreAllianceStake) {
+    // code
+  }
+
+  else if(autonType == BLUE_NEGATIVE && scoreAllianceStake) {
+    // code
+  }
+
+  else if(autonType == BLUE_NEGATIVE && !scoreAllianceStake) {
+    // code
   }
 }
