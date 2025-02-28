@@ -1,9 +1,10 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/trackingWheel.hpp"
-#include "graphics.h" // IWYU pragma: keep
+#include "graphics.h" // IWYU pragma: keep 
 #include "pros/device.hpp" // IWYU pragma: keep
 #include "pros/rtos.hpp"
+#include "lemlib-tarball/api.hpp" // IWYU pragma: keep
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -64,7 +65,7 @@ lemlib::ControllerSettings angularController(9, // proportional gain (kP)
 );
 
 // sensors for odometry
-lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel
+lemlib::OdomSensors sensors(&leftVertical, // vertical tracking wheel
                             nullptr, // vertical tracking wheel 2, set to nullptr as we don't have a second one
                             &horizontal, // horizontal tracking wheel
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
@@ -93,8 +94,9 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    pros::lcd::initialize(); // initialize brain screen
+    // pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
+    lv_example_btn_1();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -108,10 +110,10 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Heading: %f", imu.get_heading()); // heading
+            // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            // pros::lcd::print(3, "Heading: %f", imu.get_heading()); // heading
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
@@ -139,7 +141,9 @@ void competition_initialize() {}
 
 // get a path used for pure pursuit
 // this needs to be put outside a function
-ASSET(mypath_txt); // '.' replaced with "_" to make c++ happy
+//ASSET(mypath_txt); // '.' replaced with "_" to make c++ happy
+ASSET(test_path_txt);
+lemlib_tarball::Decoder decoder(test_path_txt);
 
 /**
  * Runs during auto
@@ -150,15 +154,16 @@ void autonomous() {
     chassis.setPose(0, 0, 0);
     // recordPID();
 
-    chassis.follow(mypath_txt, 5, 4000);
+    // chassis.follow(decoder["Path 1"], 8, 4000); 
+    chassis.follow(decoder["Path 2"], 2, 10000, false);
 
     chassis.waitUntil(10);
-    pros::lcd::print(4, "Traveled 10 inches during pure pursuit!");
+    // pros::lcd::print(4, "Traveled 10 inches during pure pursuit!");
     // wait until the movement is done
     chassis.waitUntilDone();
     // stopRecordingPID();
     //lv_example_chart_5();
-    pros::lcd::print(4, "pure pursuit finished!");
+    // pros::lcd::print(4, "pure pursuit finished!");
 }
 
 /**
