@@ -8,7 +8,8 @@ enum auton_type {
     RED_NEGATIVE,
     BLUE_POSITIVE,
     BLUE_NEGATIVE,
-    SKILLS
+    SKILLS,
+    NONE
 };
 
 extern auton_type autonType;
