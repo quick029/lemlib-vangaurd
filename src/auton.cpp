@@ -39,6 +39,6 @@ void runAuton() {
     intake.brake();
     // stopRecordingPID();
     // lv_example_chart_5();
-    pros::lcd::print(4, "pure pursuit finished!");
+    // pros::lcd::print(4, "pure pursuit finished!");
   }
 }

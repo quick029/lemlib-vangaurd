@@ -43,27 +43,25 @@
  */
 //#include "okapi/api.hpp"
 
-extern lemlib::Chassis chassis;
-
 extern pros::adi::DigitalOut clamp;
 extern pros::adi::DigitalOut clamp2;
 // controller
 extern pros::Controller controller;
 extern pros::Controller partner;
-extern pros::Motor intake;
 // motor groups
 extern pros::MotorGroup leftMotors; // right motor group - ports 6, 7, 9 (reversed)
+extern pros::MotorGroup rightMotors; // right motor group - ports 6, 7, 9 (reversed)
+
+extern pros::Motor intake;
+
+extern pros::adi::DigitalOut clamp;
+extern pros::adi::DigitalOut clamp2;
 
 // Inertial Sensor on port 10
 extern pros::Imu imu;
 extern pros::Distance distance;
 
-// tracking wheels
-// horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
- 
-// vertical tracking wheel encoder. Rotation sensor, port 11, reversed
-extern pros::Rotation leftVerticalEnc;
-extern pros::Rotation rightVerticalEnc;
+extern lemlib::Chassis chassis;
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
