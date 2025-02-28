@@ -147,18 +147,7 @@ ASSET(mypath_txt); // '.' replaced with "_" to make c++ happy
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 void autonomous() {
-    chassis.setPose(0, 0, 0);
-    // recordPID();
-
-    chassis.follow(mypath_txt, 5, 4000);
-
-    chassis.waitUntil(10);
-    pros::lcd::print(4, "Traveled 10 inches during pure pursuit!");
-    // wait until the movement is done
-    chassis.waitUntilDone();
-    // stopRecordingPID();
-    //lv_example_chart_5();
-    pros::lcd::print(4, "pure pursuit finished!");
+    runAuton();
 }
 
 /**
