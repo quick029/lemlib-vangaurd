@@ -50,10 +50,10 @@ void runAuton() {
   
   else if (autonType == RED_NEGATIVE && scoreAllianceStake) {
     chassis.setPose(60, -17, 180);
-    chassis.moveToPose(60, -0, 180, 1500, {.forwards = false, .maxSpeed = 70});
+    chassis.moveToPose(60, 0, 180, 1500, {.forwards = false, .maxSpeed = 70});
     chassis.turnToHeading(270, 700);
-    chassis.moveToPoint(73, 0, 10000, {.forwards = false, .maxSpeed = 30});
-    while (distance.get_distance() > 135) {
+    chassis.moveToPoint(73, 0, 10000, {.forwards = false, .maxSpeed = 27});
+    while (distance.get_distance() > 130) {
       pros::delay(20);
     }
     chassis.cancelMotion();
@@ -61,7 +61,7 @@ void runAuton() {
     pros::delay(500);
     intake.brake();
     chassis.turnToPoint(30, -27, 700, {.forwards = false});
-    chassis.moveToPoint(30, -27, 1150, {.forwards = false, .maxSpeed = 90});
+    chassis.moveToPoint(30, -27, 1250, {.forwards = false, .maxSpeed = 80});
     // chassis.moveToPose(30, -25, 70, 2250, {.forwards = false});
     chassis.waitUntilDone();
     clamp.set_value(true);
@@ -72,13 +72,13 @@ void runAuton() {
 
     chassis.moveToPoint(30, -47, 2300);
 
-    chassis.turnToHeading(270, 500);
-    chassis.moveToPoint(15, -48, 2000);
+    chassis.turnToPoint(19, -48, 500);
+    chassis.moveToPoint(19, -48, 2000, {.maxSpeed = 70});
     chassis.waitUntilDone();
-
-    // chassis.moveToPoint(35, -48, 1000, {.forwards = false});
-    // chassis.turnToPoint(11, -59, 700);
-    // chassis.moveToPoint(11, -59, 2000);
+    pros::delay(500);
+    chassis.moveToPoint(30, -48, 1000, {.forwards = false});
+    chassis.turnToPoint(19, -53, 700);
+    chassis.moveToPoint(19, -53, 2000);
     // chassis.waitUntilDone();
   }
 
