@@ -24,6 +24,7 @@
  * E_CONTROLLER_MASTER is pedantically correct within the PROS styleguide, but
  * not convenient for most student programmers.
  */
+#include "pros/rotation.hpp"
 #define PROS_USE_SIMPLE_NAMES
 
 /**
@@ -45,6 +46,10 @@
 
 extern pros::adi::DigitalOut clamp;
 extern pros::adi::DigitalOut clamp2;
+
+extern pros::Rotation rot;
+
+extern pros::MotorGroup lift;
 // controller
 extern pros::Controller controller;
 extern pros::Controller partner;
@@ -53,9 +58,6 @@ extern pros::MotorGroup leftMotors; // right motor group - ports 6, 7, 9 (revers
 extern pros::MotorGroup rightMotors; // right motor group - ports 6, 7, 9 (reversed)
 
 extern pros::Motor intake;
-
-extern pros::adi::DigitalOut clamp;
-extern pros::adi::DigitalOut clamp2;
 
 // Inertial Sensor on port 10
 extern pros::Imu imu;

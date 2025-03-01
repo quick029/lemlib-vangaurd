@@ -1,10 +1,15 @@
 #include "main.h"
 #include "auton.h"
+#include "drivercontrol.h"
 #include "graphics.h"             // IWYU pragma: keep
 #include "lemlib-tarball/api.hpp" // IWYU pragma: keep
 #include "lemlib/api.hpp"         // IWYU pragma: keep
 #include "lemlib/chassis/trackingWheel.hpp"
+#include "pros/abstract_motor.hpp"
 #include "pros/device.hpp" // IWYU pragma: keep
+#include "pros/motor_group.hpp"
+#include "pros/motors.h" // IWYU pragma: keep
+#include "pros/rotation.hpp"
 #include "pros/rtos.hpp"
 
 // controller
@@ -25,6 +30,13 @@ pros::Motor intake(-19, pros::MotorGearset::blue);
 pros::adi::DigitalOut clamp('a');
 pros::adi::DigitalOut clamp2('b');
 
+pros::Rotation rot(2);
+
+pros::MotorGroup lift(
+  { 11,-17},
+  pros::MotorGearset::green,
+  pros::v5::MotorEncoderUnits::degrees
+);
 // Inertial Sensor on port 10
 pros::Imu imu(3);
 
@@ -185,6 +197,7 @@ void autonomous() { runAuton(); }
 void opcontrol() {
   // controller
   // loop to continuously update motors
+  pros::Task BUTTON_CONTROLS(buttonControls);
   while (true) {
     // get joystick positions
     int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);

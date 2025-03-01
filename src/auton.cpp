@@ -1,7 +1,7 @@
 #include "auton.h"
 #include "main.h"
 #include "pros/rtos.hpp"
-
+#include "drivercontrol.h"
 auton_type autonType = NONE;
 bool scoreAllianceStake = true;
 bool autonConfirmed = false;
@@ -42,6 +42,7 @@ void runAuton() {
     // chassis.waitUntil(10);
     // wait until the movement is done
     chassis.waitUntilDone();
+    isClamped = true;
   }
   
   else if (autonType == RED_POSITIVE && !scoreAllianceStake) {
@@ -80,6 +81,7 @@ void runAuton() {
     chassis.turnToPoint(19, -53, 700);
     chassis.moveToPoint(19, -53, 2000);
     // chassis.waitUntilDone();
+    isClamped = true;
   }
 
   else if(autonType == BLUE_POSITIVE && scoreAllianceStake) {
@@ -109,6 +111,7 @@ void runAuton() {
     chassis.waitUntilDone();
     intake.brake();
     chassis.waitUntilDone();
+    isClamped = true;
   }
 
   else if(autonType == BLUE_POSITIVE && !scoreAllianceStake) {
