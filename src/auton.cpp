@@ -4,10 +4,11 @@
 #include "main.h"
 #include "pros/motors.h"
 #include "pros/rtos.hpp"
+#include <cmath>
 
-auton_type autonType = NONE;
+auton_type autonType = SKILLS;
 bool scoreAllianceStake = true;
-bool autonConfirmed = false;
+bool autonConfirmed = true;
 
 ASSET(skills_path_txt);
 
@@ -34,7 +35,7 @@ void setWallStakePos(wallStakePos pos) {
     lift.brake();
   } else if (pos == SCORING) {
     lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    lift.move_relative(330, 127);
+    lift.move_relative(310, 127);
   }
 }
 
@@ -111,7 +112,7 @@ void runAuton() {
     // chassis.moveToPose(30, -25, 70, 2250, {.forwards = false});
     chassis.waitUntilDone();
     clamp.set_value(true);
-    clamp2.set_value(true);
+    clamp2.set_value(true); 
     pros::delay(200);
     intake.move(127);
     chassis.turnToHeading(0, 200);
@@ -228,12 +229,14 @@ void runAuton() {
     chassis.waitUntilDone();
     pros::delay(2000);
     intake.brake();
+    chassis.turnToHeading(0, 300);
+    chassis.moveToPoint(-3, 61, 500);
     chassis.waitUntilDone();
     setWallStakePos(SCORING);
     pros::delay(1000);
     setWallStakePos(PASSIVE);
     // clampSet(true); // TEMPORARY
-    // chassis.setPose(-2, 55, 0); // TEMPORARY
+    chassis.setPose(-2, 52, 0);
     chassis.moveToPoint(-2, 47, 1000);
     chassis.turnToHeading(195, 1000);
     intake.move(127);
@@ -250,5 +253,32 @@ void runAuton() {
     chassis.follow(decoder["Corner 1"], 12, 10000, false);
     chassis.waitUntilDone();
     clampSet(false);
+    chassis.turnToHeading(165, 700);
+    chassis.follow(decoder["Align 2"], 8, 10000);
+    chassis.turnToHeading(0, 700);
+    chassis.follow(decoder["Mogo 2"], 8, 10000, false);
+    chassis.waitUntilDone();
+    clampSet(true);
+    chassis.turnToHeading(90, 700);
+    chassis.follow(decoder["Ring 4"], 8, 10000);
+    chassis.follow(decoder["Align 3"], 8, 10000, false);
+    chassis.turnToHeading(255, 700);
+    chassis.follow(decoder["Ring 5"], 8, 10000, false);
+    chassis.turnToHeading(80, 700);
+    chassis.waitUntilDone();
+    clampSet(false);
+    chassis.follow(decoder["Corner 2"], 8, 10000, false);
+    chassis.follow(decoder["Ring 6"], 8, 10000, false);
+    chassis.turnToHeading(225, 700);
+    chassis.follow(decoder["Mogo 3"], 8, 10000, false);
+    chassis.waitUntilDone();
+    clampSet(true);
+    chassis.turnToHeading(225, 700);
+    chassis.follow(decoder["Ring 7"], 8, 10000, false);    
+    chassis.turnToHeading(0, 700);
+    chassis.follow(decoder["Corner 3"], 8, 10000, false); 
+    chassis.waitUntilDone();
+    clampSet(false);
+    chassis.moveToPoint(50, -66, 1000);   
   }
 }
