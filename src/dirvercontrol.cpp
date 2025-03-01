@@ -1,6 +1,6 @@
 #include "drivercontrol.h" // IWYU pragma: keep
 #include "main.h"
-#include "pros/abstract_motor.hpp"
+#include "pros/abstract_motor.hpp" // IWYU pragma: keep
 #include "pros/misc.h"
 #include "pros/motors.h"
 
@@ -10,7 +10,7 @@ bool intakeReversed = false;
 bool wallStakeActive = false;
 
 void buttonControls(void *param) {
-  rot.reset_position();
+  wallStakeEnc.reset_position();
   while (true) {
     // clamp
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1) && isClamped) {
@@ -67,15 +67,19 @@ void buttonControls(void *param) {
 
     // wall stake
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP) &&
-        !wallStakeActive) {
+    !wallStakeActive) {
+      wallStakeEnc.reset_position();
       lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
-      lift.move_relative(40, 50);
+      lift.move(20);
+      while (wallStakeEnc.get_position() < 4000) {
+        pros::delay(10);
+      }
+      lift.brake();
       wallStakeActive = true;
       while (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
         pros::delay(50);
       }
-    }
-    else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
       lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
       lift.brake();
       wallStakeActive = false;
@@ -84,9 +88,9 @@ void buttonControls(void *param) {
       }
     }
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) &&
-        wallStakeActive && rot.get_position()/100 < 250) {
+        wallStakeActive && wallStakeEnc.get_position() / 100 < 250) {
       lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-      lift.move_relative(260, 127);
+      lift.move_relative(330, 127);
       while (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         pros::delay(50);
       }

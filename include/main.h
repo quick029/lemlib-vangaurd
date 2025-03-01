@@ -24,6 +24,7 @@
  * E_CONTROLLER_MASTER is pedantically correct within the PROS styleguide, but
  * not convenient for most student programmers.
  */
+#include "lemlib/asset.hpp" // IWYU pragma: keep
 #include "pros/rotation.hpp"
 #define PROS_USE_SIMPLE_NAMES
 
@@ -47,7 +48,7 @@
 extern pros::adi::DigitalOut clamp;
 extern pros::adi::DigitalOut clamp2;
 
-extern pros::Rotation rot;
+extern pros::Rotation wallStakeEnc;
 
 extern pros::MotorGroup lift;
 // controller

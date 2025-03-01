@@ -4,6 +4,7 @@
 #include "graphics.h"             // IWYU pragma: keep
 #include "lemlib-tarball/api.hpp" // IWYU pragma: keep
 #include "lemlib/api.hpp"         // IWYU pragma: keep
+#include "lemlib/asset.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/abstract_motor.hpp"
 #include "pros/device.hpp" // IWYU pragma: keep
@@ -30,7 +31,7 @@ pros::Motor intake(-19, pros::MotorGearset::blue);
 pros::adi::DigitalOut clamp('a');
 pros::adi::DigitalOut clamp2('b');
 
-pros::Rotation rot(2);
+pros::Rotation wallStakeEnc(-2);
 
 pros::MotorGroup lift(
   { 11,-17},
@@ -131,6 +132,9 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController,
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
+//  ASSET(skills_path_txt);
+
 void initialize() {
   // pros::lcd::initialize(); // initialize brain screen
   chassis.calibrate(); // calibrate sensors
@@ -159,7 +163,7 @@ void initialize() {
       std::cout << '\r' << std::setw(20) << "X: " << chassis.getPose().x
                 << std::setw(20) << "Y: " << chassis.getPose().y
                 << std::setw(20) << "Theta: " << chassis.getPose().theta
-                << std::setw(20) << "Heading: " << imu.get_heading()
+                << std::setw(20) << "Heading: " << wallStakeEnc.get_position()
                 << std::flush;
       // delay to save resources
       pros::delay(100);
@@ -176,12 +180,6 @@ void disabled() {}
  * runs after initialize if the robot is connected to field control
  */
 void competition_initialize() {}
-
-// get a path used for pure pursuit
-// this needs to be put outside a function
-// ASSET(mypath_txt); // '.' replaced with "_" to make c++ happy
-ASSET(test_path_txt);
-lemlib_tarball::Decoder decoder(test_path_txt);
 
 /**
  * Runs during auto
