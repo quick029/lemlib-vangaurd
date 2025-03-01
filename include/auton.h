@@ -1,7 +1,7 @@
 #ifndef AUTON_H
 #define AUTON_H
 
-extern void runAuton();
+void runAuton();
 
 enum auton_type {
     RED_POSITIVE,
