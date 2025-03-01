@@ -48,6 +48,8 @@
 extern pros::adi::DigitalOut clamp;
 extern pros::adi::DigitalOut clamp2;
 
+extern pros::adi::DigitalOut arm;
+
 extern pros::Rotation wallStakeEnc;
 
 extern pros::MotorGroup lift;

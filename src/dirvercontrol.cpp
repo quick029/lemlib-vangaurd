@@ -8,6 +8,7 @@ bool isClamped = false;
 bool isIntaking = false;
 bool intakeReversed = false;
 bool wallStakeActive = false;
+bool armDown = false;
 
 void buttonControls(void *param) {
   wallStakeEnc.reset_position();
@@ -90,8 +91,24 @@ void buttonControls(void *param) {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) &&
         wallStakeActive && wallStakeEnc.get_position() / 100 < 250) {
       lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-      lift.move_relative(330, 127);
+      lift.move_relative(310, 127);
       while (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+        pros::delay(50);
+      }
+    }
+
+    // arm
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) && !armDown) {
+      arm.set_value(true);
+      armDown = true;
+      while (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+        pros::delay(50);
+      }
+    }
+    else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) && armDown) {
+      arm.set_value(false);
+      armDown = false;
+      while (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
         pros::delay(50);
       }
     }

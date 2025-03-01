@@ -31,6 +31,8 @@ pros::Motor intake(-19, pros::MotorGearset::blue);
 pros::adi::DigitalOut clamp('a');
 pros::adi::DigitalOut clamp2('b');
 
+pros::adi::DigitalOut arm('d');
+
 pros::Rotation wallStakeEnc(-2);
 
 pros::MotorGroup lift(
